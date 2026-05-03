@@ -1,6 +1,9 @@
 import streamlit as st
 import joblib
 import os
+import string
+import nltk
+from nltk.corpus import stopwords
 
 # Set page configuration
 st.set_page_config(page_title="Spam Detection System", page_icon="📧", layout="centered")
@@ -39,8 +42,16 @@ if st.button("Check Message", type="primary"):
             st.error("Model or Vectorizer not found! Please run the `spam_detection.ipynb` notebook first to train and save the model.")
         else:
             with st.spinner("Analyzing message..."):
+                def clean_text(text):
+                    text = text.translate(str.maketrans(string.punctuation, " "*len(string.punctuation)))
+                    text = text.lower()
+                    stop_words = set(stopwords.words('english'))
+                    text = " ".join([word for word in text.split() if word not in stop_words])
+                    return text
+                
                 # Preprocess and predict
-                transformed_input = vectorizer.transform([user_input])
+                cleaned_input = clean_text(user_input)
+                transformed_input = vectorizer.transform([cleaned_input])
                 prediction = model.predict(transformed_input)[0]
                 
                 if prediction == 1:
