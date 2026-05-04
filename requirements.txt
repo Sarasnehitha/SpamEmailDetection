@@ -5,3 +5,9 @@ nltk
 streamlit
 joblib
 jupyter
+streamlit-authenticator
+beautifulsoup4
+PyYAML
+sqlalchemy
+psycopg2-binary
+python-dotenv
